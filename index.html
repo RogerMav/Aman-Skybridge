@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SkyBridge Air Cargo – Shipment Tracking, Rates & Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f6f9;--surface:#fff;--ink:#0b2a43;--mute:#5b7488;--line:#d6e0e8;--accent:#f2b705;--accent-ink:#0b2a43;--navy:#0b2a43;--navy-ink:#fff;--ok:#1b8a5a;--warn:#c27a00;--bad:#c0392b;--info:#1d6fb8;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#08151f;--surface:#0f2331;--ink:#e8f0f6;--mute:#8aa3b6;--line:#1f3a4d;--navy:#0f2331;--ok:#3ec28a;--warn:#f0a93a;--bad:#ef6b5b;--info:#5aa9ec}}
+:root[data-theme="dark"]{--bg:#08151f;--surface:#0f2331;--ink:#e8f0f6;--mute:#8aa3b6;--line:#1f3a4d;--navy:#0f2331;--ok:#3ec28a;--warn:#f0a93a;--bad:#ef6b5b;--info:#5aa9ec}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:calc(70px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Barlow,system-ui,sans-serif}
+h1,h2,h3{font-family:'Barlow Condensed','Arial Narrow',sans-serif;line-height:1.05;margin:0 0 .5em;letter-spacing:.2px}
+h1{font-size:clamp(2.6rem,7vw,4.6rem)}h2{font-size:2.3rem}h3{font-size:1.4rem}
+a{color:var(--info)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:0;z-index:5;background:var(--navy);color:var(--navy-ink);padding-top:env(safe-area-inset-top,0px)}
+header .wrap{display:flex;align-items:center;gap:16px;height:60px}
+.brand{display:flex;align-items:center;gap:10px;font:700 1.45rem 'Barlow Condensed',sans-serif;color:#fff;text-decoration:none}
+nav{margin-left:auto;display:flex;gap:4px;overflow-x:auto}
+nav a{color:#cfe0ec;text-decoration:none;padding:8px 12px;border-radius:6px;white-space:nowrap;font-weight:500}
+nav a:hover,nav a:focus-visible{background:#ffffff1f;color:#fff}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+section{padding:64px 0}
+.hero{background:var(--navy);color:#fff;padding:72px 0 80px;background-image:radial-gradient(circle at 85% 20%,#1d4a6b 0,transparent 55%)}
+.hero p.lead{font-size:1.2rem;max-width:560px;color:#cfe0ec}
+.hero .purpose{display:inline-block;border:1px solid #ffffff55;border-radius:99px;padding:4px 14px;margin-bottom:18px;color:#cfe0ec;font-size:.95rem}
+.btn{display:inline-block;background:var(--accent);color:var(--accent-ink);font:600 1rem Barlow,sans-serif;border:0;border-radius:8px;padding:12px 22px;cursor:pointer;text-decoration:none}
+.btn:hover{filter:brightness(1.08)}.btn.ghost{background:transparent;color:inherit;border:1.5px solid currentColor}
+.track{margin-top:36px;background:var(--surface);color:var(--ink);border-radius:12px;padding:18px;max-width:640px}
+.track form,.row{display:flex;gap:10px;flex-wrap:wrap}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%}
+.track input{flex:1;min-width:180px;width:auto}
+#trackOut{margin-top:12px;font-size:.95rem}
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px}
+.card h3{margin-bottom:.3em}.mute{color:var(--mute)}
+.alt{background:var(--surface);border-block:1px solid var(--line)}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:860px;font-size:.93rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--mute);background:var(--bg)}
+.tag{display:inline-block;padding:2px 10px;border-radius:99px;font-size:.82rem;font-weight:600;border:1.5px solid currentColor;white-space:nowrap}
+.s-Delivered{color:var(--ok)}.s-In-Transit{color:var(--info)}.s-Customs{color:var(--warn)}.s-Delayed{color:var(--bad)}.s-Booked{color:var(--mute)}
+.kpi{font:700 2.6rem 'Barlow Condensed',sans-serif;line-height:1}
+.bars{display:flex;align-items:flex-end;gap:10px;height:150px;margin-top:10px}
+.bars div{flex:1;background:var(--navy);border-radius:4px 4px 0 0;position:relative;min-height:4px}
+.bars span{position:absolute;bottom:-22px;left:0;right:0;text-align:center;font-size:.8rem;color:var(--mute)}
+.bars b{position:absolute;top:-20px;left:0;right:0;text-align:center;font-size:.8rem}
+.hbar{height:10px;background:var(--line);border-radius:5px;overflow:hidden;margin:4px 0 12px}.hbar i{display:block;height:100%}
+.two{display:grid;gap:28px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+label{display:block;font-weight:600;margin:12px 0 4px;font-size:.92rem}
+.result{background:var(--navy);color:#fff;border-radius:10px;padding:20px}
+.result .total{font:700 3rem 'Barlow Condensed',sans-serif;color:var(--accent)}
+.result dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:.95rem;color:#cfe0ec}.result dd{margin:0;text-align:right;color:#fff}
+footer{background:var(--navy);color:#cfe0ec;padding:28px 0;font-size:.92rem}footer a{color:#fff;margin-right:14px}
+.ok{color:var(--ok);font-weight:600}.err{color:var(--bad);font-weight:600}
+.filters{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}.filters>*{width:auto;flex:1;min-width:160px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<a class="brand" href="#home" aria-label="SkyBridge Air Cargo home"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="8" fill="#f2b705"/><path d="M5 22 L29 9 L23 25 L17 20 L12 24 L12 18 Z" fill="#0b2a43"/></svg>SkyBridge Air Cargo</a>
+<nav aria-label="Main"><a href="#home">Home</a><a href="#about">About</a><a href="#services">Services</a><a href="#shipments">Shipments</a><a href="#dashboard">Dashboard</a><a href="#calculator">Cost calculator</a><a href="#contact">Contact</a></nav>
+</div></header>
+
+<main>
+<section class="hero" id="home"><div class="wrap">
+<span class="purpose">Fast, trackable air freight for businesses</span>
+<h1>Your cargo, across continents, overnight.</h1>
+<p class="lead">SkyBridge Air Cargo moves urgent and high-value freight between 120+ airports with live tracking from booking to doorstep.</p>
+<p><a class="btn" href="#calculator">Get Started</a> &nbsp; <a class="btn ghost" href="#contact">Talk to sales</a></p>
+<div class="track"><strong>Track a shipment</strong>
+<form id="trackForm" class="row" style="margin-top:8px"><input id="trackIn" placeholder="Order number, e.g. SB-10421" aria-label="Order number" required><button class="btn" type="submit">Track</button></form>
+<div id="trackOut" class="mute">Try SB-10421, SB-10422 or SB-10424.</div></div>
+</div></section>
+
+<section id="about"><div class="wrap">
+<h2>About SkyBridge</h2>
+<div class="grid">
+<div class="card"><h3>What we do</h3><p>We book, consolidate, clear and deliver air freight. One team handles pickup, airline uplift, customs clearance and last-mile delivery.</p></div>
+<div class="card"><h3>Who we serve</h3><p>Exporters, e-commerce sellers, pharma and medical suppliers, electronics makers and manufacturers who need spare parts on time.</p></div>
+<div class="card"><h3>Service area</h3><p>India, Middle East, Southeast Asia, Europe and North America, with pickup across 40 Indian cities including Vadodara, Ahmedabad and Mumbai.</p></div>
+<div class="card"><h3>Why choose us</h3><p>Live tracking, flat and transparent rates, 98% on-time delivery and a named account manager for every customer.</p></div>
+</div></div></section>
+
+<section id="services" class="alt"><div class="wrap">
+<h2>Services</h2>
+<div class="grid">
+<div class="card"><h3>Express Air</h3><p>Door-to-door in 1–3 days. Priority uplift on the next available flight.</p></div>
+<div class="card"><h3>Standard Air</h3><p>Economical airport-to-airport or door-to-door freight in 3–6 days.</p></div>
+<div class="card"><h3>Temperature-Controlled</h3><p>Cold-chain handling for vaccines, medicines and perishables, with monitored loggers.</p></div>
+<div class="card"><h3>Customs Clearance</h3><p>Documentation, duties and brokerage handled at origin and destination.</p></div>
+<div class="card"><h3>Dangerous Goods</h3><p>Certified packing, labelling and airline approval for DG shipments.</p></div>
+<div class="card"><h3>Cargo Insurance</h3><p>All-risk cover for loss and damage from pickup to delivery.</p></div>
+</div></div></section>
+
+<section id="shipments"><div class="wrap">
+<h2>Shipment tracking</h2>
+<div class="filters"><input id="q" placeholder="Search customer, order or location" aria-label="Search shipments"><select id="fs" aria-label="Filter by status"><option value="">All statuses</option><option>Booked</option><option>In Transit</option><option>Customs</option><option>Delayed</option><option>Delivered</option></select></div>
+<div class="tw"><table><thead><tr><th>Customer</th><th>Order no.</th><th>Status</th><th>Current location</th><th>Expected delivery</th><th>Delivery partner</th><th>Contact</th></tr></thead><tbody id="tb"></tbody></table></div>
+</div></section>
+
+<section id="dashboard" class="alt"><div class="wrap">
+<h2>Manager dashboard</h2>
+<div class="grid" id="kpis"></div>
+<div class="two" style="margin-top:18px">
+<div class="card"><h3>Weekly shipment volume</h3><div class="bars" id="vol" style="margin-bottom:28px"></div></div>
+<div class="card"><h3>Shipments by status</h3><div id="stat"></div><h3 style="margin-top:14px">Needs attention</h3><ul id="alerts" style="margin:0;padding-left:18px"></ul></div>
+</div></div></section>
+
+<section id="calculator"><div class="wrap">
+<h2>Delivery cost calculator</h2>
+<div class="two">
+<div class="card">
+<label for="zone">Destination region</label><select id="zone"><option value="3.2">Domestic (India)</option><option value="5.8" selected>Middle East &amp; Asia</option><option value="7.4">Europe</option><option value="8.9">North America</option></select>
+<label for="svc">Service</label><select id="svc"><option value="1">Standard (3–6 days)</option><option value="1.6">Express (1–3 days)</option><option value="2.2">Priority next-flight</option></select>
+<div class="row"><div style="flex:1"><label for="wt">Weight (kg)</label><input id="wt" type="number" min="0.5" step="0.5" value="25"></div><div style="flex:1"><label for="pcs">Pieces</label><input id="pcs" type="number" min="1" value="1"></div></div>
+<div class="row"><div style="flex:1"><label for="l">L (cm)</label><input id="l" type="number" min="1" value="60"></div><div style="flex:1"><label for="w">W (cm)</label><input id="w" type="number" min="1" value="40"></div><div style="flex:1"><label for="h">H (cm)</label><input id="h" type="number" min="1" value="40"></div></div>
+<label for="val">Declared value (USD, for insurance)</label><input id="val" type="number" min="0" value="2000">
+<label><input type="checkbox" id="dg" style="width:auto"> Dangerous goods (+$45 handling)</label>
+<label><input type="checkbox" id="pick" style="width:auto" checked> Door pickup (+$18)</label>
+</div>
+<div class="result" aria-live="polite"><div class="mute" style="color:#cfe0ec">Estimated total</div><div class="total" id="tot">$0</div>
+<dl id="brk"></dl><p style="font-size:.85rem;color:#cfe0ec;margin-bottom:0">Chargeable weight is the higher of actual and volumetric (L×W×H ÷ 6000) weight. Estimates only; final quote on booking.</p>
+<p><a class="btn" href="#contact" id="quoteBtn">Request this quote</a></p></div>
+</div></div></section>
+
+<section id="contact" class="alt"><div class="wrap">
+<h2>Contact &amp; enquiry</h2>
+<div class="two">
+<div class="card"><h3>Reach us</h3>
+<p><strong>Email:</strong> hello@skybridgecargo.example</p>
+<p><strong>Phone:</strong> +91 265 000 0000 (24×7 operations desk)</p>
+<p><strong>Location:</strong> Cargo Terminal Road, near Vadodara Airport, Vadodara, Gujarat, India</p>
+<p><a href="https://maps.google.com/?q=Vadodara+Airport" target="_blank" rel="noopener">Open in Maps</a></p></div>
+<form class="card" id="enq" novalidate>
+<h3>Send an enquiry</h3>
+<label for="en">Name</label><input id="en" required>
+<label for="ee">Email</label><input id="ee" type="email" required>
+<label for="em">Message</label><textarea id="em" rows="4" required></textarea>
+<p><button class="btn" type="submit">Send enquiry</button></p><div id="enqOut" role="status"></div>
+</form></div></div></section>
+</main>
+
+<footer><div class="wrap"><a href="#home">Home</a><a href="#services">Services</a><a href="#dashboard">Dashboard</a><a href="#calculator">Calculator</a><a href="#contact">Contact</a><div style="margin-top:8px">© 2026 SkyBridge Air Cargo. Sample data shown for demonstration.</div></div></footer>
+
+<script>
+const S=[
+["Aarav Textiles","SB-10421","In Transit","Dubai (DXB) – in flight","Today, 6:30 PM","Emirates SkyCargo","+91 98250 11001"],
+["Meridian Pharma","SB-10422","Customs","Frankfurt (FRA) customs","Tomorrow, 11:00 AM","Lufthansa Cargo","+91 98250 11002"],
+["Patel Auto Parts","SB-10423","Delivered","Singapore – delivered","Today, 9:15 AM","Singapore Airlines Cargo","+91 98250 11003"],
+["Nova Electronics","SB-10424","Delayed","Mumbai (BOM) – awaiting uplift","Tomorrow, 4:00 PM","IndiGo CarGo","+91 98250 11004"],
+["GreenLeaf Exports","SB-10425","Booked","Vadodara – pickup scheduled","Fri, 2:00 PM","Air India Cargo","+91 98250 11005"],
+["Zenith Medical","SB-10426","In Transit","Doha (DOH) – transit hub","Today, 11:45 PM","Qatar Airways Cargo","+91 98250 11006"],
+["Kiran Handicrafts","SB-10427","In Transit","Ahmedabad (AMD) – departed","Thu, 10:00 AM","Etihad Cargo","+91 98250 11007"],
+["Orbit Components","SB-10428","Delivered","London (LHR) – delivered","Yesterday, 5:20 PM","British Airways World Cargo","+91 98250 11008"]];
+const cls=s=>"s-"+s.replace(" ","-");
+const tb=document.getElementById("tb"),q=document.getElementById("q"),fs=document.getElementById("fs");
+function draw(){const t=q.value.toLowerCase(),f=fs.value;
+const rows=S.filter(r=>(!f||r[2]===f)&&(!t||r.join(" ").toLowerCase().includes(t)));
+tb.innerHTML=rows.length?rows.map(r=>`<tr><td><strong>${r[0]}</strong></td><td>${r[1]}</td><td><span class="tag ${cls(r[2])}">${r[2]}</span></td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td><td>${r[6]}</td></tr>`).join(""):`<tr><td colspan="7" class="mute">No shipments match. Clear the search or filter.</td></tr>`}
+q.oninput=fs.onchange=draw;draw();
+
+document.getElementById("trackForm").onsubmit=e=>{e.preventDefault();
+const id=trackIn.value.trim().toUpperCase(),r=S.find(x=>x[1]===id),o=document.getElementById("trackOut");
+o.innerHTML=r?`<span class="ok">${r[1]}</span> for ${r[0]}: <span class="tag ${cls(r[2])}">${r[2]}</span> at ${r[3]}. Expected ${r[4]} via ${r[5]}.`:`<span class="err">No order found for “${id.replace(/</g,"")}”.</span> Check the number and try again.`};
+
+const cnt=k=>S.filter(r=>r[2]===k).length,n=S.length;
+const del=cnt("Delivered"),dl=cnt("Delayed"),act=n-del;
+const K=[["Active shipments",act,"in the network now"],["Delivered today",del,"completed deliveries"],["On-time rate",Math.round((n-dl)/n*100)+"%","target 95%"],["Delayed",dl,"need follow-up"],["Revenue (MTD)","$248K","+12% vs last month"],["Avg transit time","41 hrs","door to door"]];
+document.getElementById("kpis").innerHTML=K.map(k=>`<div class="card"><div class="mute">${k[0]}</div><div class="kpi">${k[1]}</div><div class="mute" style="font-size:.88rem">${k[2]}</div></div>`).join("");
+const wk=[["Mon",38],["Tue",46],["Wed",41],["Thu",55],["Fri",62],["Sat",30],["Sun",22]],mx=62;
+document.getElementById("vol").innerHTML=wk.map(d=>`<div style="height:${d[1]/mx*100}%"><b>${d[1]}</b><span>${d[0]}</span></div>`).join("");
+const col={"Booked":"var(--mute)","In Transit":"var(--info)","Customs":"var(--warn)","Delayed":"var(--bad)","Delivered":"var(--ok)"};
+document.getElementById("stat").innerHTML=Object.keys(col).map(k=>`<div>${k}: <strong>${cnt(k)}</strong></div><div class="hbar"><i style="width:${cnt(k)/n*100}%;background:${col[k]}"></i></div>`).join("");
+document.getElementById("alerts").innerHTML=S.filter(r=>r[2]==="Delayed"||r[2]==="Customs").map(r=>`<li>${r[1]} (${r[0]}): ${r[2].toLowerCase()} at ${r[3]}</li>`).join("");
+
+const ids=["zone","svc","wt","pcs","l","w","h","val","dg","pick"],$=i=>document.getElementById(i);
+function calc(){const wt=Math.max(0,+$("wt").value),p=Math.max(1,+$("pcs").value),vol=(+$("l").value*+$("w").value*+$("h").value*p)/6000;
+const ch=Math.max(wt*p,vol),base=ch*+$("zone").value*+$("svc").value,fuel=base*.12,ins=Math.max(0,+$("val").value)*.01,dg=$("dg").checked?45:0,pk=$("pick").checked?18:0,t=base+fuel+ins+dg+pk;
+const f=x=>"$"+x.toFixed(2);
+$("tot").textContent=f(t);
+$("brk").innerHTML=`<dt>Chargeable weight</dt><dd>${ch.toFixed(1)} kg</dd><dt>Air freight</dt><dd>${f(base)}</dd><dt>Fuel surcharge (12%)</dt><dd>${f(fuel)}</dd><dt>Insurance (1%)</dt><dd>${f(ins)}</dd><dt>Handling &amp; pickup</dt><dd>${f(dg+pk)}</dd>`}
+ids.forEach(i=>$(i).addEventListener("input",calc));calc();
+$("quoteBtn").onclick=()=>{$("em").value=`Please quote: ${$("wt").value} kg x ${$("pcs").value} pc, ${$("zone").selectedOptions[0].text}, ${$("svc").selectedOptions[0].text}. Estimate ${$("tot").textContent}.`};
+
+$("enq").onsubmit=e=>{e.preventDefault();const o=$("enqOut");
+if(!$("en").value.trim()||!/^\S+@\S+\.\S+$/.test($("ee").value)||!$("em").value.trim()){o.innerHTML='<span class="err">Enter your name, a valid email and a message.</span>';return}
+o.innerHTML=`<span class="ok">Thanks, ${$("en").value.trim().replace(/</g,"")}. Our team will reply within 4 working hours.</span>`;e.target.reset()};
+</script>
+</body>
+</html>
